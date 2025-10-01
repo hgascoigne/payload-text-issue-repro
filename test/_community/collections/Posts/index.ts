@@ -22,5 +22,15 @@ export const PostsCollection: CollectionConfig = {
         features: ({ defaultFeatures }) => [...defaultFeatures],
       }),
     },
+    {
+      name: 'categories',
+      type: 'text',
+      hasMany: true,
+    },
+    {
+      name: 'subcategories',
+      type: 'text',
+      hasMany: true,
+    },
   ],
 }

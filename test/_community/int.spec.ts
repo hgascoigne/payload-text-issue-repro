@@ -47,22 +47,39 @@ describe('_Community Tests', () => {
   // --__--__--__--__--__--__--__--__--__
 
   it('local API example', async () => {
-    const newPost = await payload.create({
+    await payload.create({
       collection: postsSlug,
       data: {
         title: 'LOCAL API EXAMPLE',
+        categories: ['category-1'],
+        subcategories: ['subcategory-1'],
       },
       context: {},
     })
 
-    expect(newPost.title).toEqual('LOCAL API EXAMPLE')
+    const result = await payload.find({
+      collection: postsSlug,
+      where: {
+        categories: {
+          equals: 'category-1',
+        },
+        subcategories: {
+          equals: 'subcategory-1',
+        },
+      },
+      context: {},
+    })
+
+    expect(result.docs[0]?.title).toEqual('LOCAL API EXAMPLE')
   })
 
   it('rest API example', async () => {
-    const data = await restClient
+    await restClient
       .POST(`/${postsSlug}`, {
         body: JSON.stringify({
           title: 'REST API EXAMPLE',
+          categories: ['category-1'],
+          subcategories: ['subcategory-1'],
         }),
         headers: {
           Authorization: `JWT ${token}`,
@@ -70,6 +87,17 @@ describe('_Community Tests', () => {
       })
       .then((res) => res.json())
 
-    expect(data.doc.title).toEqual('REST API EXAMPLE')
+    const result = await restClient
+      .GET(`/${postsSlug}`, {
+        query: {
+          where: {
+            categories: { equals: 'category-1' },
+            subcategories: { equals: 'subcategory-1' },
+          },
+        },
+      })
+      .then((res) => res.json())
+
+    expect(result.docs[0]?.title).toEqual('REST API EXAMPLE')
   })
 })

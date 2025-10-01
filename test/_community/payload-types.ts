@@ -141,6 +141,8 @@ export interface Post {
     };
     [k: string]: unknown;
   } | null;
+  categories?: string[] | null;
+  subcategories?: string[] | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -280,6 +282,8 @@ export interface PayloadMigration {
 export interface PostsSelect<T extends boolean = true> {
   title?: T;
   content?: T;
+  categories?: T;
+  subcategories?: T;
   updatedAt?: T;
   createdAt?: T;
 }
